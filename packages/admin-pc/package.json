@@ -1,0 +1,31 @@
+{
+  "name": "admin-pc",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "rsbuild build",
+    "dev": "rsbuild dev --open",
+    "preview": "rsbuild preview"
+  },
+  "dependencies": {
+    "@douyinfe/semi-foundation": "^2.73.0",
+    "@douyinfe/semi-icons": "^2.73.0",
+    "@douyinfe/semi-ui": "^2.73.0",
+    "@tanstack/react-router": "^1.141.6",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@rsbuild/core": "^1.6.14",
+    "@rsbuild/plugin-less": "^1.5.0",
+    "@rsbuild/plugin-react": "^1.4.2",
+    "@tanstack/router-devtools": "^1.141.6",
+    "@tanstack/router-plugin": "^1.141.7",
+    "@types/node": "^25.0.3",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "less": "^4.5.1",
+    "typescript": "^5.9.3"
+  }
+}
