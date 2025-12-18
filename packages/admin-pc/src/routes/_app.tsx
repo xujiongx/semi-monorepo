@@ -6,6 +6,7 @@ import {
   Link,
   createFileRoute,
   useLocation,
+  redirect,
 } from "@tanstack/react-router";
 import { menuConfig, MenuItem } from "@/config/menu";
 import { AppHeader } from "@/components/Header";
@@ -82,5 +83,16 @@ const AppComponent = () => {
 };
 
 export const Route = createFileRoute("/_app")({
+  beforeLoad: ({ location }) => {
+    const token = localStorage.getItem('access_token');
+    if (!token) {
+      throw redirect({
+        to: '/login',
+        search: {
+          redirect: location.href,
+        },
+      });
+    }
+  },
   component: AppComponent,
 });

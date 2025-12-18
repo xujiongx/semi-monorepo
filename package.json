@@ -6,6 +6,8 @@
     "build:web": "pnpm -F web build",
     "dev:admin": "pnpm -F admin-pc dev",
     "build:admin": "pnpm -F admin-pc build",
+    "dev:server": "pnpm -F server start:dev",
+    "build:server": "pnpm -F server build",
     "dev": "pnpm -r --parallel dev",
     "build": "pnpm -r build"
   },

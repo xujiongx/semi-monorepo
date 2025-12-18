@@ -10,6 +10,8 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as AppRouteImport } from './routes/_app'
+import { Route as RegisterIndexRouteImport } from './routes/register/index'
+import { Route as LoginIndexRouteImport } from './routes/login/index'
 import { Route as AppIndexRouteImport } from './routes/_app/index'
 import { Route as AppSettingsIndexRouteImport } from './routes/_app/settings/index'
 import { Route as AppLiveIndexRouteImport } from './routes/_app/live/index'
@@ -18,6 +20,16 @@ import { Route as AppHistogramIndexRouteImport } from './routes/_app/histogram/i
 
 const AppRoute = AppRouteImport.update({
   id: '/_app',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RegisterIndexRoute = RegisterIndexRouteImport.update({
+  id: '/register/',
+  path: '/register/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginIndexRoute = LoginIndexRouteImport.update({
+  id: '/login/',
+  path: '/login/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AppIndexRoute = AppIndexRouteImport.update({
@@ -48,6 +60,8 @@ const AppHistogramIndexRoute = AppHistogramIndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof AppIndexRoute
+  '/login': typeof LoginIndexRoute
+  '/register': typeof RegisterIndexRoute
   '/histogram': typeof AppHistogramIndexRoute
   '/home': typeof AppHomeIndexRoute
   '/live': typeof AppLiveIndexRoute
@@ -55,6 +69,8 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof AppIndexRoute
+  '/login': typeof LoginIndexRoute
+  '/register': typeof RegisterIndexRoute
   '/histogram': typeof AppHistogramIndexRoute
   '/home': typeof AppHomeIndexRoute
   '/live': typeof AppLiveIndexRoute
@@ -64,6 +80,8 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_app': typeof AppRouteWithChildren
   '/_app/': typeof AppIndexRoute
+  '/login/': typeof LoginIndexRoute
+  '/register/': typeof RegisterIndexRoute
   '/_app/histogram/': typeof AppHistogramIndexRoute
   '/_app/home/': typeof AppHomeIndexRoute
   '/_app/live/': typeof AppLiveIndexRoute
@@ -71,13 +89,29 @@ export interface FileRoutesById {
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/histogram' | '/home' | '/live' | '/settings'
+  fullPaths:
+    | '/'
+    | '/login'
+    | '/register'
+    | '/histogram'
+    | '/home'
+    | '/live'
+    | '/settings'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/histogram' | '/home' | '/live' | '/settings'
+  to:
+    | '/'
+    | '/login'
+    | '/register'
+    | '/histogram'
+    | '/home'
+    | '/live'
+    | '/settings'
   id:
     | '__root__'
     | '/_app'
     | '/_app/'
+    | '/login/'
+    | '/register/'
     | '/_app/histogram/'
     | '/_app/home/'
     | '/_app/live/'
@@ -86,6 +120,8 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   AppRoute: typeof AppRouteWithChildren
+  LoginIndexRoute: typeof LoginIndexRoute
+  RegisterIndexRoute: typeof RegisterIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -95,6 +131,20 @@ declare module '@tanstack/react-router' {
       path: ''
       fullPath: ''
       preLoaderRoute: typeof AppRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/register/': {
+      id: '/register/'
+      path: '/register'
+      fullPath: '/register'
+      preLoaderRoute: typeof RegisterIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login/': {
+      id: '/login/'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_app/': {
@@ -155,6 +205,8 @@ const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   AppRoute: AppRouteWithChildren,
+  LoginIndexRoute: LoginIndexRoute,
+  RegisterIndexRoute: RegisterIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
