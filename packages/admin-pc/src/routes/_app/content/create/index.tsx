@@ -12,9 +12,12 @@ function ContentCreate() {
     const [content, setContent] = useState("");
     const [loading, setLoading] = useState(false);
     const [categories, setCategories] = useState<any[]>([]);
+    const getToken = () => localStorage.getItem('access_token');
 
     useEffect(() => {
-        fetch('/api/category')
+        fetch('/api/category', {
+            headers: { 'Authorization': `Bearer ${getToken()}` }
+        })
             .then(res => res.json())
             .then(data => setCategories(data))
             .catch(() => Toast.error('获取分类列表失败'));
@@ -25,7 +28,10 @@ function ContentCreate() {
         try {
             const res = await fetch('/api/article', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${getToken()}` 
+                },
                 body: JSON.stringify({ ...values, content }),
             });
             

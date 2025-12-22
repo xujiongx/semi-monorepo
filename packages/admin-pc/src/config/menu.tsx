@@ -1,5 +1,5 @@
 import React from 'react';
-import { IconHome, IconHistogram, IconLive, IconSetting, IconArticle } from '@douyinfe/semi-icons';
+import { IconHome, IconHistogram, IconLive, IconSetting, IconArticle, IconHistory } from '@douyinfe/semi-icons';
 
 export interface MenuItem {
   itemKey: string;
@@ -15,6 +15,18 @@ export const menuConfig: MenuItem[] = [
     text: '首页',
     icon: <IconHome />,
     path: '/home',
+  },
+  {
+    itemKey: 'TimeTracks',
+    text: '时光轨迹',
+    icon: <IconHistory />,
+    items: [
+        {
+            itemKey: 'DailyMoments',
+            text: '每日时光',
+            path: '/time-tracks/daily',
+        }
+    ]
   },
   {
     itemKey: 'Content',

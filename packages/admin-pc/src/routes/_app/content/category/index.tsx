@@ -20,11 +20,16 @@ function CategoryList() {
   const [visible, setVisible] = useState(false);
   const [currentCategory, setCurrentCategory] = useState<Category | null>(null);
   const formApi = useRef<any>();
+  const getToken = () => localStorage.getItem('access_token');
 
   const fetchData = async () => {
     setLoading(true);
     try {
-      const res = await fetch("/api/category");
+      const res = await fetch("/api/category", {
+        headers: {
+          'Authorization': `Bearer ${getToken()}`
+        }
+      });
       if (!res.ok) throw new Error("Failed to fetch");
       const list = await res.json();
       setData(list);
@@ -50,7 +55,12 @@ function CategoryList() {
       content: "确定要删除这个分类吗？",
       onOk: async () => {
         try {
-          const res = await fetch(`/api/category/${id}`, { method: "DELETE" });
+          const res = await fetch(`/api/category/${id}`, {
+            method: "DELETE",
+            headers: {
+              'Authorization': `Bearer ${getToken()}`
+            }
+          });
           if (!res.ok) throw new Error("Failed to delete");
           Toast.success("删除成功");
           fetchData();
@@ -68,14 +78,20 @@ function CategoryList() {
         // Edit
         res = await fetch(`/api/category/${currentCategory.id}`, {
           method: "PATCH",
-          headers: { "Content-Type": "application/json" },
+          headers: { 
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${getToken()}` 
+          },
           body: JSON.stringify(values),
         });
       } else {
         // Create
         res = await fetch("/api/category", {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: { 
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${getToken()}` 
+          },
           body: JSON.stringify(values),
         });
       }

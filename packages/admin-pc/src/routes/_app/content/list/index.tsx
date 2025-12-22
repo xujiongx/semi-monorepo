@@ -19,11 +19,14 @@ function ContentList() {
     const navigate = useNavigate();
     const [data, setData] = useState<Article[]>([]);
     const [loading, setLoading] = useState(false);
+    const getToken = () => localStorage.getItem('access_token');
 
     const fetchData = async () => {
         setLoading(true);
         try {
-            const res = await fetch('/api/article');
+            const res = await fetch('/api/article', {
+                headers: { 'Authorization': `Bearer ${getToken()}` }
+            });
             if (!res.ok) throw new Error('Failed to fetch');
             const list = await res.json();
             setData(list);
@@ -48,7 +51,10 @@ function ContentList() {
             content: '确定要删除这篇文章吗？',
             onOk: async () => {
                 try {
-                    const res = await fetch(`/api/article/${id}`, { method: 'DELETE' });
+                    const res = await fetch(`/api/article/${id}`, {
+                        method: 'DELETE',
+                        headers: { 'Authorization': `Bearer ${getToken()}` }
+                    });
                     if (!res.ok) throw new Error('Failed to delete');
                     Toast.success('删除成功');
                     fetchData();

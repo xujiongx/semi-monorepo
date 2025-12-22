@@ -18,6 +18,7 @@ import { Route as AppProfileIndexRouteImport } from './routes/_app/profile/index
 import { Route as AppLiveIndexRouteImport } from './routes/_app/live/index'
 import { Route as AppHomeIndexRouteImport } from './routes/_app/home/index'
 import { Route as AppHistogramIndexRouteImport } from './routes/_app/histogram/index'
+import { Route as AppTimeTracksDailyIndexRouteImport } from './routes/_app/time-tracks/daily/index'
 import { Route as AppContentListIndexRouteImport } from './routes/_app/content/list/index'
 import { Route as AppContentCreateIndexRouteImport } from './routes/_app/content/create/index'
 import { Route as AppContentCategoryIndexRouteImport } from './routes/_app/content/category/index'
@@ -67,6 +68,11 @@ const AppHistogramIndexRoute = AppHistogramIndexRouteImport.update({
   path: '/histogram/',
   getParentRoute: () => AppRoute,
 } as any)
+const AppTimeTracksDailyIndexRoute = AppTimeTracksDailyIndexRouteImport.update({
+  id: '/time-tracks/daily/',
+  path: '/time-tracks/daily/',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppContentListIndexRoute = AppContentListIndexRouteImport.update({
   id: '/content/list/',
   path: '/content/list/',
@@ -101,6 +107,7 @@ export interface FileRoutesByFullPath {
   '/content/category': typeof AppContentCategoryIndexRoute
   '/content/create': typeof AppContentCreateIndexRoute
   '/content/list': typeof AppContentListIndexRoute
+  '/time-tracks/daily': typeof AppTimeTracksDailyIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof AppIndexRoute
@@ -115,6 +122,7 @@ export interface FileRoutesByTo {
   '/content/category': typeof AppContentCategoryIndexRoute
   '/content/create': typeof AppContentCreateIndexRoute
   '/content/list': typeof AppContentListIndexRoute
+  '/time-tracks/daily': typeof AppTimeTracksDailyIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -131,6 +139,7 @@ export interface FileRoutesById {
   '/_app/content/category/': typeof AppContentCategoryIndexRoute
   '/_app/content/create/': typeof AppContentCreateIndexRoute
   '/_app/content/list/': typeof AppContentListIndexRoute
+  '/_app/time-tracks/daily/': typeof AppTimeTracksDailyIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -147,6 +156,7 @@ export interface FileRouteTypes {
     | '/content/category'
     | '/content/create'
     | '/content/list'
+    | '/time-tracks/daily'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -161,6 +171,7 @@ export interface FileRouteTypes {
     | '/content/category'
     | '/content/create'
     | '/content/list'
+    | '/time-tracks/daily'
   id:
     | '__root__'
     | '/_app'
@@ -176,6 +187,7 @@ export interface FileRouteTypes {
     | '/_app/content/category/'
     | '/_app/content/create/'
     | '/_app/content/list/'
+    | '/_app/time-tracks/daily/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -249,6 +261,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppHistogramIndexRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/time-tracks/daily/': {
+      id: '/_app/time-tracks/daily/'
+      path: '/time-tracks/daily'
+      fullPath: '/time-tracks/daily'
+      preLoaderRoute: typeof AppTimeTracksDailyIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/content/list/': {
       id: '/_app/content/list/'
       path: '/content/list'
@@ -291,6 +310,7 @@ interface AppRouteChildren {
   AppContentCategoryIndexRoute: typeof AppContentCategoryIndexRoute
   AppContentCreateIndexRoute: typeof AppContentCreateIndexRoute
   AppContentListIndexRoute: typeof AppContentListIndexRoute
+  AppTimeTracksDailyIndexRoute: typeof AppTimeTracksDailyIndexRoute
 }
 
 const AppRouteChildren: AppRouteChildren = {
@@ -304,6 +324,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppContentCategoryIndexRoute: AppContentCategoryIndexRoute,
   AppContentCreateIndexRoute: AppContentCreateIndexRoute,
   AppContentListIndexRoute: AppContentListIndexRoute,
+  AppTimeTracksDailyIndexRoute: AppTimeTracksDailyIndexRoute,
 }
 
 const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)

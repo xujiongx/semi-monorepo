@@ -1,4 +1,4 @@
-import { Injectable, BadRequestException } from '@nestjs/common';
+import { Injectable, BadRequestException, UnauthorizedException } from '@nestjs/common';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
 import { SupabaseService } from '../supabase/supabase.service';
@@ -7,7 +7,19 @@ import { SupabaseService } from '../supabase/supabase.service';
 export class CategoryService {
   constructor(private readonly supabaseService: SupabaseService) {}
 
-  async create(createCategoryDto: CreateCategoryDto) {
+  private async getUser(token: string) {
+    const { data: { user }, error } = await this.supabaseService
+      .getClient()
+      .auth.getUser(token);
+
+    if (error || !user) {
+      throw new UnauthorizedException('Invalid token');
+    }
+    return user;
+  }
+
+  async create(token: string, createCategoryDto: CreateCategoryDto) {
+    await this.getUser(token);
     const { data, error } = await this.supabaseService
       .getClient()
       .from('categories')
@@ -21,7 +33,8 @@ export class CategoryService {
     return data;
   }
 
-  async findAll() {
+  async findAll(token: string) {
+    await this.getUser(token);
     const { data, error } = await this.supabaseService
       .getClient()
       .from('categories')
@@ -39,7 +52,8 @@ export class CategoryService {
     }));
   }
 
-  async findOne(id: string) {
+  async findOne(token: string, id: string) {
+    await this.getUser(token);
     const { data, error } = await this.supabaseService
       .getClient()
       .from('categories')
@@ -53,7 +67,8 @@ export class CategoryService {
     return data;
   }
 
-  async update(id: string, updateCategoryDto: UpdateCategoryDto) {
+  async update(token: string, id: string, updateCategoryDto: UpdateCategoryDto) {
+    await this.getUser(token);
     const { data, error } = await this.supabaseService
       .getClient()
       .from('categories')
@@ -68,7 +83,8 @@ export class CategoryService {
     return data;
   }
 
-  async remove(id: string) {
+  async remove(token: string, id: string) {
+    await this.getUser(token);
     const { error } = await this.supabaseService
       .getClient()
       .from('categories')

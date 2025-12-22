@@ -14,15 +14,20 @@ function ContentEditor() {
     const [loading, setLoading] = useState(false);
     const [initValues, setInitValues] = useState<any>(null);
     const [categories, setCategories] = useState<any[]>([]);
+    const getToken = () => localStorage.getItem('access_token');
 
     useEffect(() => {
         // Fetch categories
-        fetch('/api/category')
+        fetch('/api/category', {
+            headers: { 'Authorization': `Bearer ${getToken()}` }
+        })
             .then(res => res.json())
             .then(data => setCategories(data));
 
         if (id) {
-            fetch(`/api/article/${id}`)
+            fetch(`/api/article/${id}`, {
+                headers: { 'Authorization': `Bearer ${getToken()}` }
+            })
                 .then(res => res.json())
                 .then(data => {
                     setInitValues(data);
@@ -37,7 +42,10 @@ function ContentEditor() {
         try {
             const res = await fetch(`/api/article/${id}`, {
                 method: 'PATCH',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${getToken()}` 
+                },
                 body: JSON.stringify({ ...values, content }),
             });
 
