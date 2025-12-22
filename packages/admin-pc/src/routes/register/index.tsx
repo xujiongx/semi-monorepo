@@ -38,7 +38,7 @@ function RegisterComponent() {
     };
 
     return (
-        <div className={styles.container}>
+        <div>
             <div className={styles.card}>
                 <Typography.Title heading={2} className={styles.title}>
                     Admin Register
