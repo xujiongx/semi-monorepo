@@ -1,20 +1,88 @@
+@keyframes slideUpFade {
+    from {
+        opacity: 0;
+        transform: translateY(40px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
 .container {
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background-color: var(--semi-color-bg-1);
+    background-image: url('../../assets/bg.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative;
+    overflow: hidden;
+    
+    &::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(circle at center, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.5) 100%);
+        backdrop-filter: blur(3px);
+        z-index: 0;
+    }
 }
 
 .card {
-    width: 400px;
-    padding: 32px;
-    background-color: var(--semi-color-bg-0);
-    border-radius: 12px;
-    box-shadow: var(--semi-shadow-elevated);
+    position: relative;
+    z-index: 1;
+    width: 380px;
+    padding: 48px 40px;
+    
+    /* Modern Glassmorphism */
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.5));
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    
+    border-radius: 24px;
+    box-shadow: 
+        0 20px 40px -10px rgba(0, 0, 0, 0.2),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.6);
+        
+    animation: slideUpFade 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+
+    :global {
+        .semi-input-wrapper__with-prefix .semi-input {
+            padding-left: 4px;
+        }
+    }
+}
+
+.header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 40px;
 }
 
 .title {
+    margin-top: 16px;
+    margin-bottom: 0 !important;
+    font-weight: 700;
+    color: #1c1f23;
+    letter-spacing: -0.5px;
+    background: linear-gradient(135deg, #1c1f23 0%, #4a5568 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.footer {
+    margin-top: 24px;
     text-align: center;
-    margin-bottom: 32px;
+    font-size: 14px;
+    color: var(--semi-color-text-2);
+    opacity: 0.8;
+    transition: opacity 0.2s;
+    
+    &:hover {
+        opacity: 1;
+    }
 }
