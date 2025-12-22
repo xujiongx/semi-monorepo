@@ -20,6 +20,7 @@ import { Route as AppHomeIndexRouteImport } from './routes/_app/home/index'
 import { Route as AppHistogramIndexRouteImport } from './routes/_app/histogram/index'
 import { Route as AppTimeTracksMilestoneIndexRouteImport } from './routes/_app/time-tracks/milestone/index'
 import { Route as AppTimeTracksDailyIndexRouteImport } from './routes/_app/time-tracks/daily/index'
+import { Route as AppContentResourcesIndexRouteImport } from './routes/_app/content/resources/index'
 import { Route as AppContentListIndexRouteImport } from './routes/_app/content/list/index'
 import { Route as AppContentCreateIndexRouteImport } from './routes/_app/content/create/index'
 import { Route as AppContentCategoryIndexRouteImport } from './routes/_app/content/category/index'
@@ -80,6 +81,12 @@ const AppTimeTracksDailyIndexRoute = AppTimeTracksDailyIndexRouteImport.update({
   path: '/time-tracks/daily/',
   getParentRoute: () => AppRoute,
 } as any)
+const AppContentResourcesIndexRoute =
+  AppContentResourcesIndexRouteImport.update({
+    id: '/content/resources/',
+    path: '/content/resources/',
+    getParentRoute: () => AppRoute,
+  } as any)
 const AppContentListIndexRoute = AppContentListIndexRouteImport.update({
   id: '/content/list/',
   path: '/content/list/',
@@ -114,6 +121,7 @@ export interface FileRoutesByFullPath {
   '/content/category': typeof AppContentCategoryIndexRoute
   '/content/create': typeof AppContentCreateIndexRoute
   '/content/list': typeof AppContentListIndexRoute
+  '/content/resources': typeof AppContentResourcesIndexRoute
   '/time-tracks/daily': typeof AppTimeTracksDailyIndexRoute
   '/time-tracks/milestone': typeof AppTimeTracksMilestoneIndexRoute
 }
@@ -130,6 +138,7 @@ export interface FileRoutesByTo {
   '/content/category': typeof AppContentCategoryIndexRoute
   '/content/create': typeof AppContentCreateIndexRoute
   '/content/list': typeof AppContentListIndexRoute
+  '/content/resources': typeof AppContentResourcesIndexRoute
   '/time-tracks/daily': typeof AppTimeTracksDailyIndexRoute
   '/time-tracks/milestone': typeof AppTimeTracksMilestoneIndexRoute
 }
@@ -148,6 +157,7 @@ export interface FileRoutesById {
   '/_app/content/category/': typeof AppContentCategoryIndexRoute
   '/_app/content/create/': typeof AppContentCreateIndexRoute
   '/_app/content/list/': typeof AppContentListIndexRoute
+  '/_app/content/resources/': typeof AppContentResourcesIndexRoute
   '/_app/time-tracks/daily/': typeof AppTimeTracksDailyIndexRoute
   '/_app/time-tracks/milestone/': typeof AppTimeTracksMilestoneIndexRoute
 }
@@ -166,6 +176,7 @@ export interface FileRouteTypes {
     | '/content/category'
     | '/content/create'
     | '/content/list'
+    | '/content/resources'
     | '/time-tracks/daily'
     | '/time-tracks/milestone'
   fileRoutesByTo: FileRoutesByTo
@@ -182,6 +193,7 @@ export interface FileRouteTypes {
     | '/content/category'
     | '/content/create'
     | '/content/list'
+    | '/content/resources'
     | '/time-tracks/daily'
     | '/time-tracks/milestone'
   id:
@@ -199,6 +211,7 @@ export interface FileRouteTypes {
     | '/_app/content/category/'
     | '/_app/content/create/'
     | '/_app/content/list/'
+    | '/_app/content/resources/'
     | '/_app/time-tracks/daily/'
     | '/_app/time-tracks/milestone/'
   fileRoutesById: FileRoutesById
@@ -288,6 +301,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppTimeTracksDailyIndexRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/content/resources/': {
+      id: '/_app/content/resources/'
+      path: '/content/resources'
+      fullPath: '/content/resources'
+      preLoaderRoute: typeof AppContentResourcesIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/content/list/': {
       id: '/_app/content/list/'
       path: '/content/list'
@@ -330,6 +350,7 @@ interface AppRouteChildren {
   AppContentCategoryIndexRoute: typeof AppContentCategoryIndexRoute
   AppContentCreateIndexRoute: typeof AppContentCreateIndexRoute
   AppContentListIndexRoute: typeof AppContentListIndexRoute
+  AppContentResourcesIndexRoute: typeof AppContentResourcesIndexRoute
   AppTimeTracksDailyIndexRoute: typeof AppTimeTracksDailyIndexRoute
   AppTimeTracksMilestoneIndexRoute: typeof AppTimeTracksMilestoneIndexRoute
 }
@@ -345,6 +366,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppContentCategoryIndexRoute: AppContentCategoryIndexRoute,
   AppContentCreateIndexRoute: AppContentCreateIndexRoute,
   AppContentListIndexRoute: AppContentListIndexRoute,
+  AppContentResourcesIndexRoute: AppContentResourcesIndexRoute,
   AppTimeTracksDailyIndexRoute: AppTimeTracksDailyIndexRoute,
   AppTimeTracksMilestoneIndexRoute: AppTimeTracksMilestoneIndexRoute,
 }

@@ -35,9 +35,14 @@ export const menuConfig: MenuItem[] = [
   },
   {
     itemKey: 'Content',
-    text: '内容管理',
+    text: '内容沉淀',
     icon: <IconArticle />,
     items: [
+        {
+            itemKey: 'Resources',
+            text: '时光资源',
+            path: '/content/resources',
+        },
         {
             itemKey: 'ContentList',
             text: '内容列表',

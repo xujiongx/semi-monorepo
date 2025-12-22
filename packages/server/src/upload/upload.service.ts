@@ -16,7 +16,9 @@ export class UploadService {
 
     const apiKey = this.configService.get<string>('IMG_BB_API_KEY');
     if (!apiKey || apiKey === 'YOUR_IMGBB_API_KEY_HERE') {
-        throw new InternalServerErrorException('ImgBB API Key is not configured in .env file');
+      throw new InternalServerErrorException(
+        'ImgBB API Key is not configured in .env file',
+      );
     }
 
     // Convert buffer to base64
@@ -32,7 +34,7 @@ export class UploadService {
         method: 'POST',
         body: formData,
       });
-
+      console.log('💩', response);
       const result = await response.json();
 
       if (!response.ok) {
