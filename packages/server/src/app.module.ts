@@ -9,6 +9,7 @@ import { ArticleModule } from './article/article.module';
 import { UserModule } from './user/user.module';
 import { UploadModule } from './upload/upload.module';
 import { TimeTrackModule } from './time-track/time-track.module';
+import { MilestoneModule } from './milestone/milestone.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { TimeTrackModule } from './time-track/time-track.module';
     ArticleModule,
     UploadModule,
     TimeTrackModule,
+    MilestoneModule,
   ],
   controllers: [AppController],
   providers: [AppService],

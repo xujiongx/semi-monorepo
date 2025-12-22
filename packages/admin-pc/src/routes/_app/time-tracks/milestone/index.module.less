@@ -1,0 +1,73 @@
+.container {
+  padding: 24px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.filters {
+  display: flex;
+  gap: 16px;
+}
+
+.timeline {
+  padding: 24px;
+  background: var(--semi-color-bg-0);
+  border-radius: 12px;
+}
+
+.milestoneCard {
+  width: 100%;
+  border-radius: 8px;
+  border: 1px solid var(--semi-color-border);
+  padding: 16px;
+  background: var(--semi-color-bg-0);
+  transition: box-shadow 0.3s;
+
+  &:hover {
+    box-shadow: var(--semi-shadow-elevated);
+  }
+}
+
+.milestoneHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 8px;
+}
+
+.milestoneTitle {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--semi-color-text-0);
+}
+
+.milestoneDate {
+  font-size: 14px;
+  color: var(--semi-color-text-2);
+}
+
+.milestoneContent {
+  color: var(--semi-color-text-1);
+  margin-bottom: 12px;
+  white-space: pre-wrap;
+}
+
+.attachments {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.attachmentImage {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 4px;
+  cursor: pointer;
+}

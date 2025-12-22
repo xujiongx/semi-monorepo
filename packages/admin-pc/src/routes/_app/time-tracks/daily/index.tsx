@@ -14,6 +14,7 @@ import {
   Rating,
   TextArea,
   Toast,
+  Image,
 } from "@douyinfe/semi-ui";
 import {
   IconPlus,
@@ -120,7 +121,7 @@ function DailyMoments() {
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-        <Typography.Title heading={2}>每日时光</Typography.Title>
+        <Typography.Title heading={2}>时光日志</Typography.Title>
       </div>
 
       {/* Create Section */}
@@ -269,12 +270,11 @@ function DailyMoments() {
                   {log.images && log.images.length > 0 && (
                     <div className={styles.mediaGrid}>
                       {log.images.map((img, idx) => (
-                        <img
+                        <Image
                           key={idx}
                           src={img}
                           className={styles.mediaItem}
                           alt="时光媒体"
-                          onClick={() => window.open(img, "_blank")}
                         />
                       ))}
                     </div>

@@ -23,8 +23,13 @@ export const menuConfig: MenuItem[] = [
     items: [
         {
             itemKey: 'DailyMoments',
-            text: '每日时光',
+            text: '时光日志',
             path: '/time-tracks/daily',
+        },
+        {
+            itemKey: 'Milestone',
+            text: '时光里程碑',
+            path: '/time-tracks/milestone',
         }
     ]
   },
