@@ -22,7 +22,7 @@ export class AuthService {
     return data;
   }
 
-  async login(authDto: AuthDto) {
+  async login(authDto: AuthDto, ip?: string, userAgent?: string) {
     const { email, password } = authDto;
     const { data, error } = await this.supabaseService
       .getClient()
@@ -33,6 +33,18 @@ export class AuthService {
 
     if (error) {
       throw new UnauthorizedException(error.message);
+    }
+
+    // Log login
+    if (data.user) {
+        await this.supabaseService
+            .getClient()
+            .from('login_logs')
+            .insert({
+                user_id: data.user.id,
+                ip_address: ip,
+                device: userAgent
+            });
     }
 
     return data;

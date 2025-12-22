@@ -14,6 +14,7 @@ import { Route as RegisterIndexRouteImport } from './routes/register/index'
 import { Route as LoginIndexRouteImport } from './routes/login/index'
 import { Route as AppIndexRouteImport } from './routes/_app/index'
 import { Route as AppSettingsIndexRouteImport } from './routes/_app/settings/index'
+import { Route as AppProfileIndexRouteImport } from './routes/_app/profile/index'
 import { Route as AppLiveIndexRouteImport } from './routes/_app/live/index'
 import { Route as AppHomeIndexRouteImport } from './routes/_app/home/index'
 import { Route as AppHistogramIndexRouteImport } from './routes/_app/histogram/index'
@@ -44,6 +45,11 @@ const AppIndexRoute = AppIndexRouteImport.update({
 const AppSettingsIndexRoute = AppSettingsIndexRouteImport.update({
   id: '/settings/',
   path: '/settings/',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppProfileIndexRoute = AppProfileIndexRouteImport.update({
+  id: '/profile/',
+  path: '/profile/',
   getParentRoute: () => AppRoute,
 } as any)
 const AppLiveIndexRoute = AppLiveIndexRouteImport.update({
@@ -89,6 +95,7 @@ export interface FileRoutesByFullPath {
   '/histogram': typeof AppHistogramIndexRoute
   '/home': typeof AppHomeIndexRoute
   '/live': typeof AppLiveIndexRoute
+  '/profile': typeof AppProfileIndexRoute
   '/settings': typeof AppSettingsIndexRoute
   '/content/edit/$id': typeof AppContentEditIdRoute
   '/content/category': typeof AppContentCategoryIndexRoute
@@ -102,6 +109,7 @@ export interface FileRoutesByTo {
   '/histogram': typeof AppHistogramIndexRoute
   '/home': typeof AppHomeIndexRoute
   '/live': typeof AppLiveIndexRoute
+  '/profile': typeof AppProfileIndexRoute
   '/settings': typeof AppSettingsIndexRoute
   '/content/edit/$id': typeof AppContentEditIdRoute
   '/content/category': typeof AppContentCategoryIndexRoute
@@ -117,6 +125,7 @@ export interface FileRoutesById {
   '/_app/histogram/': typeof AppHistogramIndexRoute
   '/_app/home/': typeof AppHomeIndexRoute
   '/_app/live/': typeof AppLiveIndexRoute
+  '/_app/profile/': typeof AppProfileIndexRoute
   '/_app/settings/': typeof AppSettingsIndexRoute
   '/_app/content/edit/$id': typeof AppContentEditIdRoute
   '/_app/content/category/': typeof AppContentCategoryIndexRoute
@@ -132,6 +141,7 @@ export interface FileRouteTypes {
     | '/histogram'
     | '/home'
     | '/live'
+    | '/profile'
     | '/settings'
     | '/content/edit/$id'
     | '/content/category'
@@ -145,6 +155,7 @@ export interface FileRouteTypes {
     | '/histogram'
     | '/home'
     | '/live'
+    | '/profile'
     | '/settings'
     | '/content/edit/$id'
     | '/content/category'
@@ -159,6 +170,7 @@ export interface FileRouteTypes {
     | '/_app/histogram/'
     | '/_app/home/'
     | '/_app/live/'
+    | '/_app/profile/'
     | '/_app/settings/'
     | '/_app/content/edit/$id'
     | '/_app/content/category/'
@@ -207,6 +219,13 @@ declare module '@tanstack/react-router' {
       path: '/settings'
       fullPath: '/settings'
       preLoaderRoute: typeof AppSettingsIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/profile/': {
+      id: '/_app/profile/'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof AppProfileIndexRouteImport
       parentRoute: typeof AppRoute
     }
     '/_app/live/': {
@@ -266,6 +285,7 @@ interface AppRouteChildren {
   AppHistogramIndexRoute: typeof AppHistogramIndexRoute
   AppHomeIndexRoute: typeof AppHomeIndexRoute
   AppLiveIndexRoute: typeof AppLiveIndexRoute
+  AppProfileIndexRoute: typeof AppProfileIndexRoute
   AppSettingsIndexRoute: typeof AppSettingsIndexRoute
   AppContentEditIdRoute: typeof AppContentEditIdRoute
   AppContentCategoryIndexRoute: typeof AppContentCategoryIndexRoute
@@ -278,6 +298,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppHistogramIndexRoute: AppHistogramIndexRoute,
   AppHomeIndexRoute: AppHomeIndexRoute,
   AppLiveIndexRoute: AppLiveIndexRoute,
+  AppProfileIndexRoute: AppProfileIndexRoute,
   AppSettingsIndexRoute: AppSettingsIndexRoute,
   AppContentEditIdRoute: AppContentEditIdRoute,
   AppContentCategoryIndexRoute: AppContentCategoryIndexRoute,

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { createFileRoute, useNavigate, Link } from '@tanstack/react-router';
 import { Form, Button, Typography, Toast } from '@douyinfe/semi-ui';
 import styles from './index.module.less';
+import { SITE_CONFIG } from '@/config/site';
 
 export const Route = createFileRoute('/login/')({
   component: LoginComponent,
@@ -44,7 +45,7 @@ function LoginComponent() {
         <div>
             <div className={styles.card}>
                 <Typography.Title heading={2} className={styles.title}>
-                    Admin Login
+                    {SITE_CONFIG.enTitle} Login
                 </Typography.Title>
                 <Form onSubmit={handleSubmit}>
                     <Form.Input

@@ -33,5 +33,8 @@ export default defineConfig({
       ],
     },
   },
+  html: {
+    title: '时光储存库',
+  },
   plugins: [pluginReact(), pluginLess()],
 });

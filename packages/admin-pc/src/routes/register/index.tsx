@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { createFileRoute, useNavigate, Link } from '@tanstack/react-router';
 import { Form, Button, Typography, Toast } from '@douyinfe/semi-ui';
 import styles from './index.module.less';
+import { SITE_CONFIG } from '@/config/site';
 
 export const Route = createFileRoute('/register/')({
   component: RegisterComponent,
@@ -41,7 +42,7 @@ function RegisterComponent() {
         <div>
             <div className={styles.card}>
                 <Typography.Title heading={2} className={styles.title}>
-                    Admin Register
+                    {SITE_CONFIG.enTitle} Register
                 </Typography.Title>
                 <Form onSubmit={handleSubmit}>
                     <Form.Input

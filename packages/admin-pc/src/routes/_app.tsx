@@ -10,7 +10,7 @@ import {
 } from "@tanstack/react-router";
 import { menuConfig, MenuItem } from "@/config/menu";
 import { AppHeader } from "@/components/Header";
-import { AppFooter } from "@/components/Footer";
+import { SITE_CONFIG } from "@/config/site";
 
 const { Sider, Content } = Layout;
 
@@ -20,7 +20,7 @@ const AppComponent = () => {
 
   const selectedKeys = useMemo(() => {
     const currentPath = location.pathname;
-    
+
     const findKey = (items: MenuItem[]): string | null => {
       for (const item of items) {
         if (item.path === currentPath) return item.itemKey;
@@ -51,12 +51,12 @@ const AppComponent = () => {
         );
       }
       return (
-        <Nav.Item 
-            itemKey={item.itemKey} 
-            text={item.text} 
-            icon={item.icon} 
-            key={item.itemKey}
-            onClick={() => item.path && navigate({ to: item.path })}
+        <Nav.Item
+          itemKey={item.itemKey}
+          text={item.text}
+          icon={item.icon}
+          key={item.itemKey}
+          onClick={() => item.path && navigate({ to: item.path })}
         />
       );
     });
@@ -70,7 +70,7 @@ const AppComponent = () => {
           style={{ maxWidth: 220, height: "100%" }}
           header={{
             logo: <IconSemiLogo style={{ fontSize: 36 }} />,
-            text: "时光储存库",
+            text: SITE_CONFIG.title,
           }}
           footer={{
             collapseButton: true,
@@ -96,10 +96,10 @@ const AppComponent = () => {
 
 export const Route = createFileRoute("/_app")({
   beforeLoad: ({ location }) => {
-    const token = localStorage.getItem('access_token');
+    const token = localStorage.getItem("access_token");
     if (!token) {
       throw redirect({
-        to: '/login',
+        to: "/login",
         search: {
           redirect: location.href,
         },
