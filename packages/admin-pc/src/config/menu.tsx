@@ -1,10 +1,10 @@
 import React from 'react';
-import { IconHome, IconHistogram, IconLive, IconSetting } from '@douyinfe/semi-icons';
+import { IconHome, IconHistogram, IconLive, IconSetting, IconArticle } from '@douyinfe/semi-icons';
 
 export interface MenuItem {
   itemKey: string;
   text: string;
-  icon: React.ReactNode;
+  icon?: React.ReactNode;
   path?: string;
   items?: MenuItem[];
 }
@@ -15,6 +15,23 @@ export const menuConfig: MenuItem[] = [
     text: '首页',
     icon: <IconHome />,
     path: '/home',
+  },
+  {
+    itemKey: 'Content',
+    text: '内容管理',
+    icon: <IconArticle />,
+    items: [
+        {
+            itemKey: 'ContentList',
+            text: '内容列表',
+            path: '/content/list',
+        },
+        {
+            itemKey: 'Category',
+            text: '分类管理',
+            path: '/content/category',
+        },
+    ]
   },
   {
     itemKey: 'Histogram',

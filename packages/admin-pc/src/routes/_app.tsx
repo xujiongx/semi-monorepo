@@ -3,9 +3,9 @@ import { Layout, Nav } from "@douyinfe/semi-ui";
 import { IconSemiLogo } from "@douyinfe/semi-icons";
 import {
   Outlet,
-  Link,
   createFileRoute,
   useLocation,
+  useNavigate,
   redirect,
 } from "@tanstack/react-router";
 import { menuConfig, MenuItem } from "@/config/menu";
@@ -16,11 +16,24 @@ const { Sider, Content } = Layout;
 
 const AppComponent = () => {
   const location = useLocation();
+  const navigate = useNavigate();
 
   const selectedKeys = useMemo(() => {
     const currentPath = location.pathname;
-    const matched = menuConfig.find((item) => item.path === currentPath);
-    return matched ? [matched.itemKey] : ["Home"];
+    
+    const findKey = (items: MenuItem[]): string | null => {
+      for (const item of items) {
+        if (item.path === currentPath) return item.itemKey;
+        if (item.items) {
+          const childKey = findKey(item.items);
+          if (childKey) return childKey;
+        }
+      }
+      return null;
+    };
+
+    const key = findKey(menuConfig);
+    return key ? [key] : [];
   }, [location.pathname]);
 
   const renderMenuItems = (items: MenuItem[]) => {
@@ -38,13 +51,13 @@ const AppComponent = () => {
         );
       }
       return (
-        <Link
-          to={item.path}
-          key={item.itemKey}
-          style={{ textDecoration: "none", color: "inherit" }}
-        >
-          <Nav.Item itemKey={item.itemKey} text={item.text} icon={item.icon} />
-        </Link>
+        <Nav.Item 
+            itemKey={item.itemKey} 
+            text={item.text} 
+            icon={item.icon} 
+            key={item.itemKey}
+            onClick={() => item.path && navigate({ to: item.path })}
+        />
       );
     });
   };
@@ -57,7 +70,7 @@ const AppComponent = () => {
           style={{ maxWidth: 220, height: "100%" }}
           header={{
             logo: <IconSemiLogo style={{ fontSize: 36 }} />,
-            text: "Admin PC",
+            text: "时光储存库",
           }}
           footer={{
             collapseButton: true,
@@ -76,7 +89,6 @@ const AppComponent = () => {
         >
           <Outlet />
         </Content>
-        <AppFooter />
       </Layout>
     </Layout>
   );

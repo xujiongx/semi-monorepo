@@ -17,6 +17,10 @@ import { Route as AppSettingsIndexRouteImport } from './routes/_app/settings/ind
 import { Route as AppLiveIndexRouteImport } from './routes/_app/live/index'
 import { Route as AppHomeIndexRouteImport } from './routes/_app/home/index'
 import { Route as AppHistogramIndexRouteImport } from './routes/_app/histogram/index'
+import { Route as AppContentListIndexRouteImport } from './routes/_app/content/list/index'
+import { Route as AppContentCreateIndexRouteImport } from './routes/_app/content/create/index'
+import { Route as AppContentCategoryIndexRouteImport } from './routes/_app/content/category/index'
+import { Route as AppContentEditIdRouteImport } from './routes/_app/content/edit/$id'
 
 const AppRoute = AppRouteImport.update({
   id: '/_app',
@@ -57,6 +61,26 @@ const AppHistogramIndexRoute = AppHistogramIndexRouteImport.update({
   path: '/histogram/',
   getParentRoute: () => AppRoute,
 } as any)
+const AppContentListIndexRoute = AppContentListIndexRouteImport.update({
+  id: '/content/list/',
+  path: '/content/list/',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppContentCreateIndexRoute = AppContentCreateIndexRouteImport.update({
+  id: '/content/create/',
+  path: '/content/create/',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppContentCategoryIndexRoute = AppContentCategoryIndexRouteImport.update({
+  id: '/content/category/',
+  path: '/content/category/',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppContentEditIdRoute = AppContentEditIdRouteImport.update({
+  id: '/content/edit/$id',
+  path: '/content/edit/$id',
+  getParentRoute: () => AppRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof AppIndexRoute
@@ -66,6 +90,10 @@ export interface FileRoutesByFullPath {
   '/home': typeof AppHomeIndexRoute
   '/live': typeof AppLiveIndexRoute
   '/settings': typeof AppSettingsIndexRoute
+  '/content/edit/$id': typeof AppContentEditIdRoute
+  '/content/category': typeof AppContentCategoryIndexRoute
+  '/content/create': typeof AppContentCreateIndexRoute
+  '/content/list': typeof AppContentListIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof AppIndexRoute
@@ -75,6 +103,10 @@ export interface FileRoutesByTo {
   '/home': typeof AppHomeIndexRoute
   '/live': typeof AppLiveIndexRoute
   '/settings': typeof AppSettingsIndexRoute
+  '/content/edit/$id': typeof AppContentEditIdRoute
+  '/content/category': typeof AppContentCategoryIndexRoute
+  '/content/create': typeof AppContentCreateIndexRoute
+  '/content/list': typeof AppContentListIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -86,6 +118,10 @@ export interface FileRoutesById {
   '/_app/home/': typeof AppHomeIndexRoute
   '/_app/live/': typeof AppLiveIndexRoute
   '/_app/settings/': typeof AppSettingsIndexRoute
+  '/_app/content/edit/$id': typeof AppContentEditIdRoute
+  '/_app/content/category/': typeof AppContentCategoryIndexRoute
+  '/_app/content/create/': typeof AppContentCreateIndexRoute
+  '/_app/content/list/': typeof AppContentListIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -97,6 +133,10 @@ export interface FileRouteTypes {
     | '/home'
     | '/live'
     | '/settings'
+    | '/content/edit/$id'
+    | '/content/category'
+    | '/content/create'
+    | '/content/list'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -106,6 +146,10 @@ export interface FileRouteTypes {
     | '/home'
     | '/live'
     | '/settings'
+    | '/content/edit/$id'
+    | '/content/category'
+    | '/content/create'
+    | '/content/list'
   id:
     | '__root__'
     | '/_app'
@@ -116,6 +160,10 @@ export interface FileRouteTypes {
     | '/_app/home/'
     | '/_app/live/'
     | '/_app/settings/'
+    | '/_app/content/edit/$id'
+    | '/_app/content/category/'
+    | '/_app/content/create/'
+    | '/_app/content/list/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -182,6 +230,34 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppHistogramIndexRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/content/list/': {
+      id: '/_app/content/list/'
+      path: '/content/list'
+      fullPath: '/content/list'
+      preLoaderRoute: typeof AppContentListIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/content/create/': {
+      id: '/_app/content/create/'
+      path: '/content/create'
+      fullPath: '/content/create'
+      preLoaderRoute: typeof AppContentCreateIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/content/category/': {
+      id: '/_app/content/category/'
+      path: '/content/category'
+      fullPath: '/content/category'
+      preLoaderRoute: typeof AppContentCategoryIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/content/edit/$id': {
+      id: '/_app/content/edit/$id'
+      path: '/content/edit/$id'
+      fullPath: '/content/edit/$id'
+      preLoaderRoute: typeof AppContentEditIdRouteImport
+      parentRoute: typeof AppRoute
+    }
   }
 }
 
@@ -191,6 +267,10 @@ interface AppRouteChildren {
   AppHomeIndexRoute: typeof AppHomeIndexRoute
   AppLiveIndexRoute: typeof AppLiveIndexRoute
   AppSettingsIndexRoute: typeof AppSettingsIndexRoute
+  AppContentEditIdRoute: typeof AppContentEditIdRoute
+  AppContentCategoryIndexRoute: typeof AppContentCategoryIndexRoute
+  AppContentCreateIndexRoute: typeof AppContentCreateIndexRoute
+  AppContentListIndexRoute: typeof AppContentListIndexRoute
 }
 
 const AppRouteChildren: AppRouteChildren = {
@@ -199,6 +279,10 @@ const AppRouteChildren: AppRouteChildren = {
   AppHomeIndexRoute: AppHomeIndexRoute,
   AppLiveIndexRoute: AppLiveIndexRoute,
   AppSettingsIndexRoute: AppSettingsIndexRoute,
+  AppContentEditIdRoute: AppContentEditIdRoute,
+  AppContentCategoryIndexRoute: AppContentCategoryIndexRoute,
+  AppContentCreateIndexRoute: AppContentCreateIndexRoute,
+  AppContentListIndexRoute: AppContentListIndexRoute,
 }
 
 const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
