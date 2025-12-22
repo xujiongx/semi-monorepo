@@ -1,4 +1,8 @@
-import { Injectable, BadRequestException, UnauthorizedException } from '@nestjs/common';
+import {
+  Injectable,
+  BadRequestException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
 import { SupabaseService } from '../supabase/supabase.service';
@@ -8,9 +12,10 @@ export class CategoryService {
   constructor(private readonly supabaseService: SupabaseService) {}
 
   private async getUser(token: string) {
-    const { data: { user }, error } = await this.supabaseService
-      .getClient()
-      .auth.getUser(token);
+    const {
+      data: { user },
+      error,
+    } = await this.supabaseService.getClient().auth.getUser(token);
 
     if (error || !user) {
       throw new UnauthorizedException('Invalid token');
@@ -19,11 +24,11 @@ export class CategoryService {
   }
 
   async create(token: string, createCategoryDto: CreateCategoryDto) {
-    await this.getUser(token);
+    const user = await this.getUser(token);
     const { data, error } = await this.supabaseService
       .getClient()
       .from('categories')
-      .insert(createCategoryDto)
+      .insert({ ...createCategoryDto, user_id: user.id })
       .select()
       .single();
 
@@ -34,11 +39,12 @@ export class CategoryService {
   }
 
   async findAll(token: string) {
-    await this.getUser(token);
+    const user = await this.getUser(token);
     const { data, error } = await this.supabaseService
       .getClient()
       .from('categories')
       .select('*, articles(count)')
+      .eq('user_id', user.id)
       .order('created_at', { ascending: false });
 
     if (error) {
@@ -53,12 +59,13 @@ export class CategoryService {
   }
 
   async findOne(token: string, id: string) {
-    await this.getUser(token);
+    const user = await this.getUser(token);
     const { data, error } = await this.supabaseService
       .getClient()
       .from('categories')
       .select('*')
       .eq('id', id)
+      .eq('user_id', user.id)
       .single();
 
     if (error) {
@@ -67,13 +74,18 @@ export class CategoryService {
     return data;
   }
 
-  async update(token: string, id: string, updateCategoryDto: UpdateCategoryDto) {
-    await this.getUser(token);
+  async update(
+    token: string,
+    id: string,
+    updateCategoryDto: UpdateCategoryDto,
+  ) {
+    const user = await this.getUser(token);
     const { data, error } = await this.supabaseService
       .getClient()
       .from('categories')
       .update(updateCategoryDto)
       .eq('id', id)
+      .eq('user_id', user.id)
       .select()
       .single();
 
@@ -84,12 +96,13 @@ export class CategoryService {
   }
 
   async remove(token: string, id: string) {
-    await this.getUser(token);
+    const user = await this.getUser(token);
     const { error } = await this.supabaseService
       .getClient()
       .from('categories')
       .delete()
-      .eq('id', id);
+      .eq('id', id)
+      .eq('user_id', user.id);
 
     if (error) {
       throw new BadRequestException(error.message);

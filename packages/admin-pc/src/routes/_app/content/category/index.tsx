@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { Table, Button, Space, Modal, Toast, Form } from "@douyinfe/semi-ui";
 import { IconEdit, IconDelete, IconPlus } from "@douyinfe/semi-icons";
+import request from "@/utils/request";
 
 export const Route = createFileRoute("/_app/content/category/")({
   component: CategoryList,
@@ -20,21 +21,14 @@ function CategoryList() {
   const [visible, setVisible] = useState(false);
   const [currentCategory, setCurrentCategory] = useState<Category | null>(null);
   const formApi = useRef<any>();
-  const getToken = () => localStorage.getItem('access_token');
 
   const fetchData = async () => {
     setLoading(true);
     try {
-      const res = await fetch("/api/category", {
-        headers: {
-          'Authorization': `Bearer ${getToken()}`
-        }
-      });
-      if (!res.ok) throw new Error("Failed to fetch");
-      const list = await res.json();
-      setData(list);
+      const list = await request.get("/category");
+      setData(list as any);
     } catch (error) {
-      Toast.error("获取分类失败");
+      // Error handled by interceptor
     } finally {
       setLoading(false);
     }
@@ -55,17 +49,11 @@ function CategoryList() {
       content: "确定要删除这个分类吗？",
       onOk: async () => {
         try {
-          const res = await fetch(`/api/category/${id}`, {
-            method: "DELETE",
-            headers: {
-              'Authorization': `Bearer ${getToken()}`
-            }
-          });
-          if (!res.ok) throw new Error("Failed to delete");
+          await request.delete(`/category/${id}`);
           Toast.success("删除成功");
           fetchData();
         } catch (error) {
-          Toast.error("删除失败");
+          // Error handled by interceptor
         }
       },
     });
@@ -73,37 +61,20 @@ function CategoryList() {
 
   const handleSubmit = async (values: any) => {
     try {
-      let res;
       if (currentCategory) {
         // Edit
-        res = await fetch(`/api/category/${currentCategory.id}`, {
-          method: "PATCH",
-          headers: { 
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${getToken()}` 
-          },
-          body: JSON.stringify(values),
-        });
+        await request.patch(`/category/${currentCategory.id}`, values);
       } else {
         // Create
-        res = await fetch("/api/category", {
-          method: "POST",
-          headers: { 
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${getToken()}` 
-          },
-          body: JSON.stringify(values),
-        });
+        await request.post("/category", values);
       }
-
-      if (!res.ok) throw new Error("Operation failed");
 
       Toast.success(currentCategory ? "更新成功" : "创建成功");
       setVisible(false);
       setCurrentCategory(null);
       fetchData();
     } catch (error) {
-      Toast.error("操作失败");
+      // Error handled by interceptor
     }
   };
 

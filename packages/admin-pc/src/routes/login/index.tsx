@@ -4,6 +4,7 @@ import { Form, Button, Typography, Toast } from "@douyinfe/semi-ui";
 import styles from "./index.module.less";
 import { SITE_CONFIG } from "@/config/site";
 import { IconLock, IconMail, IconSemiLogo } from "@douyinfe/semi-icons";
+import request from "@/utils/request";
 
 export const Route = createFileRoute("/login/")({
   component: LoginComponent,
@@ -16,19 +17,7 @@ function LoginComponent() {
   const handleSubmit = async (values: any) => {
     setLoading(true);
     try {
-      const response = await fetch("/api/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(values),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || "登录失败");
-      }
+      const data: any = await request.post("/auth/login", values);
 
       // 存储 Token (实际项目中可能需要更安全的存储方式或配合 Context)
       localStorage.setItem("access_token", data.session?.access_token);
@@ -36,7 +25,7 @@ function LoginComponent() {
       Toast.success("登录成功");
       navigate({ to: "/" });
     } catch (error: any) {
-      Toast.error(error.message);
+      // Interceptor handles error
     } finally {
       setLoading(false);
     }

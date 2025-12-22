@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { createFileRoute, useNavigate } from '@tanstack/react-router';
-import { Form, Button, Toast, Select } from '@douyinfe/semi-ui';
-import MDEditor from '@uiw/react-md-editor';
+import React, { useState, useEffect } from "react";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { Form, Button, Toast } from "@douyinfe/semi-ui";
+import MDEditor from "@uiw/react-md-editor";
+import request from "@/utils/request";
 
-export const Route = createFileRoute('/_app/content/edit/$id')({
-  component: ContentEditor,
+export const Route = createFileRoute("/_app/content/edit/$id")({
+    component: ContentEditor,
 });
 
 function ContentEditor() {
@@ -14,47 +15,35 @@ function ContentEditor() {
     const [loading, setLoading] = useState(false);
     const [initValues, setInitValues] = useState<any>(null);
     const [categories, setCategories] = useState<any[]>([]);
-    const getToken = () => localStorage.getItem('access_token');
 
     useEffect(() => {
         // Fetch categories
-        fetch('/api/category', {
-            headers: { 'Authorization': `Bearer ${getToken()}` }
-        })
-            .then(res => res.json())
-            .then(data => setCategories(data));
+        request.get('/category')
+            .then(data => setCategories(data as any[]))
+            .catch(() => {
+                // Error handled by interceptor
+            });
 
         if (id) {
-            fetch(`/api/article/${id}`, {
-                headers: { 'Authorization': `Bearer ${getToken()}` }
-            })
-                .then(res => res.json())
-                .then(data => {
+            request.get(`/article/${id}`)
+                .then((data: any) => {
                     setInitValues(data);
                     setContent(data.content);
                 })
-                .catch(() => Toast.error('获取文章详情失败'));
+                .catch(() => {
+                    // Error handled by interceptor
+                });
         }
     }, [id]);
 
     const handleSubmit = async (values: any) => {
         setLoading(true);
         try {
-            const res = await fetch(`/api/article/${id}`, {
-                method: 'PATCH',
-                headers: { 
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${getToken()}` 
-                },
-                body: JSON.stringify({ ...values, content }),
-            });
-
-            if (!res.ok) throw new Error('Update failed');
-
-            Toast.success('保存成功');
+            await request.patch(`/article/${id}`, { ...values, content });
+            Toast.success('更新成功');
             navigate({ to: '/content/list' });
         } catch (error) {
-            Toast.error('保存失败');
+            // Error handled by interceptor
         } finally {
             setLoading(false);
         }

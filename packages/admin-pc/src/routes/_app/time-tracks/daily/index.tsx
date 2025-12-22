@@ -24,6 +24,7 @@ import {
   IconDelete,
   IconHash,
 } from "@douyinfe/semi-icons";
+import request from "@/utils/request";
 import styles from "./index.module.less";
 
 export const Route = createFileRoute("/_app/time-tracks/daily/")({
@@ -61,17 +62,10 @@ function DailyMoments() {
   // Mock upload state
   const [fileList, setFileList] = useState<any[]>([]);
 
-  const getToken = () => localStorage.getItem('access_token');
-
   const fetchTags = async () => {
     try {
-      const res = await fetch('/api/category', {
-        headers: { 'Authorization': `Bearer ${getToken()}` }
-      });
-      if (res.ok) {
-        const data = await res.json();
-        setTags(data);
-      }
+      const data = await request.get('/category');
+      setTags(data as any);
     } catch (error) {
       console.error('Failed to fetch tags', error);
     }
@@ -79,19 +73,15 @@ function DailyMoments() {
 
   const fetchLogs = async () => {
     try {
-      const params = new URLSearchParams();
-      if (keyword) params.append('keyword', keyword);
-      if (filterDate) params.append('date', filterDate.toISOString());
-      if (filterType) params.append('type', filterType);
+      const params: any = {};
+      if (keyword) params.keyword = keyword;
+      if (filterDate) params.date = filterDate.toISOString();
+      if (filterType) params.type = filterType;
       
-      const res = await fetch(`/api/time-tracks/daily?${params.toString()}`, {
-        headers: { 'Authorization': `Bearer ${getToken()}` }
-      });
-      if (!res.ok) throw new Error('Failed to fetch logs');
-      const data = await res.json();
-      setLogs(data);
+      const data = await request.get('/time-tracks/daily', { params });
+      setLogs(data as any);
     } catch (error) {
-      Toast.error('获取日志失败');
+      // Interceptor handles error
     }
   };
 
@@ -108,21 +98,12 @@ function DailyMoments() {
         .map((f) => f.response?.data?.url || f.url)
         .filter(Boolean);
 
-      const res = await fetch('/api/time-tracks/daily', {
-        method: 'POST',
-        headers: { 
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${getToken()}` 
-        },
-        body: JSON.stringify({
-          content,
-          images,
-          tags: selectedTags,
-          date: selectedDate ? selectedDate.toISOString() : new Date().toISOString()
-        })
+      await request.post('/time-tracks/daily', {
+        content,
+        images,
+        tags: selectedTags,
+        date: selectedDate ? selectedDate.toISOString() : new Date().toISOString()
       });
-
-      if (!res.ok) throw new Error('Failed to create log');
       
       setContent("");
       setFileList([]);
@@ -130,7 +111,7 @@ function DailyMoments() {
       Toast.success('保存成功');
       fetchLogs(); // Refresh list
     } catch (error) {
-      Toast.error('保存失败');
+      // Interceptor handles error
     }
   };
 
@@ -182,6 +163,7 @@ function DailyMoments() {
         <div className={styles.uploadArea}>
           <Upload
             action="/api/upload"
+            headers={{ Authorization: `Bearer ${localStorage.getItem('access_token')}` }}
             name="file"
             listType="picture"
             fileList={fileList}

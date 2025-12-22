@@ -3,6 +3,7 @@ import { Layout, Button, Avatar, Dropdown, Breadcrumb, Space } from '@douyinfe/s
 import { IconBell, IconHelpCircle, IconExit, IconHome, IconUser } from '@douyinfe/semi-icons';
 import { useNavigate, useLocation } from '@tanstack/react-router';
 import { menuConfig, MenuItem } from '@/config/menu';
+import request from '@/utils/request';
 import styles from './index.module.less';
 
 const { Header } = Layout;
@@ -17,13 +18,8 @@ export const AppHeader = () => {
             const token = localStorage.getItem('access_token');
             if (!token) return;
             try {
-                const res = await fetch('/api/user/profile', {
-                    headers: { 'Authorization': `Bearer ${token}` }
-                });
-                if (res.ok) {
-                    const data = await res.json();
-                    setUserInfo(data);
-                }
+                const data = await request.get('/user/profile');
+                setUserInfo(data as any);
             } catch (error) {
                 // Ignore error for header
             }

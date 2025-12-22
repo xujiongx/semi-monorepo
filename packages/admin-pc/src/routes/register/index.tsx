@@ -4,6 +4,7 @@ import { IconSemiLogo, IconMail, IconLock } from '@douyinfe/semi-icons';
 import { Form, Button, Typography, Toast } from '@douyinfe/semi-ui';
 import styles from './index.module.less';
 import { SITE_CONFIG } from '@/config/site';
+import request from '@/utils/request';
 
 export const Route = createFileRoute('/register/')({
   component: RegisterComponent,
@@ -16,24 +17,11 @@ function RegisterComponent() {
     const handleSubmit = async (values: any) => {
         setLoading(true);
         try {
-            const response = await fetch('/api/auth/register', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(values),
-            });
-
-            const data = await response.json();
-
-            if (!response.ok) {
-                throw new Error(data.message || '注册失败');
-            }
-
+            await request.post('/auth/register', values);
             Toast.success('注册成功，请登录');
             navigate({ to: '/login' });
         } catch (error: any) {
-            Toast.error(error.message);
+            // Interceptor handles error
         } finally {
             setLoading(false);
         }

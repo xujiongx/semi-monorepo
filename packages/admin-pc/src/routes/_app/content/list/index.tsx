@@ -1,17 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
-import { Table, Button, Space, Modal, Toast, Tag } from '@douyinfe/semi-ui';
+import { Table, Button, Space, Tag, Modal, Toast } from '@douyinfe/semi-ui';
 import { IconEdit, IconDelete, IconPlus } from '@douyinfe/semi-icons';
+import request from '@/utils/request';
 
 export const Route = createFileRoute('/_app/content/list/')({
-  component: ContentList,
+    component: ContentList,
 });
 
 interface Article {
     id: string;
     title: string;
     category: string;
-    status: 'published' | 'draft';
+    status: 'draft' | 'published';
     created_at: string;
 }
 
@@ -19,19 +20,14 @@ function ContentList() {
     const navigate = useNavigate();
     const [data, setData] = useState<Article[]>([]);
     const [loading, setLoading] = useState(false);
-    const getToken = () => localStorage.getItem('access_token');
 
     const fetchData = async () => {
         setLoading(true);
         try {
-            const res = await fetch('/api/article', {
-                headers: { 'Authorization': `Bearer ${getToken()}` }
-            });
-            if (!res.ok) throw new Error('Failed to fetch');
-            const list = await res.json();
-            setData(list);
+            const list = await request.get('/article');
+            setData(list as any);
         } catch (error) {
-            Toast.error('获取列表失败');
+            // Error handled by interceptor
         } finally {
             setLoading(false);
         }
@@ -51,15 +47,11 @@ function ContentList() {
             content: '确定要删除这篇文章吗？',
             onOk: async () => {
                 try {
-                    const res = await fetch(`/api/article/${id}`, {
-                        method: 'DELETE',
-                        headers: { 'Authorization': `Bearer ${getToken()}` }
-                    });
-                    if (!res.ok) throw new Error('Failed to delete');
+                    await request.delete(`/article/${id}`);
                     Toast.success('删除成功');
                     fetchData();
                 } catch (error) {
-                    Toast.error('删除失败');
+                    // Error handled by interceptor
                 }
             }
         });

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { createFileRoute } from '@tanstack/react-router';
 import { Tabs, TabPane, Form, Button, Toast, Table, Avatar, Tag, Card, Row, Col } from '@douyinfe/semi-ui';
 import { IconUser, IconLock, IconHistory } from '@douyinfe/semi-icons';
+import request from '@/utils/request';
 
 export const Route = createFileRoute('/_app/profile/')({
   component: ProfilePage,
@@ -14,19 +15,13 @@ function ProfilePage() {
     const [logs, setLogs] = useState<any[]>([]);
     const [logsLoading, setLogsLoading] = useState(false);
 
-    const getToken = () => localStorage.getItem('access_token');
-
     const fetchProfile = async () => {
         setLoading(true);
         try {
-            const res = await fetch('/api/user/profile', {
-                headers: { 'Authorization': `Bearer ${getToken()}` }
-            });
-            if (!res.ok) throw new Error('Failed to fetch profile');
-            const data = await res.json();
+            const data = await request.get('/user/profile');
             setProfile(data);
         } catch (error) {
-            Toast.error('获取个人信息失败');
+            // Interceptor handles error
         } finally {
             setLoading(false);
         }
@@ -35,14 +30,10 @@ function ProfilePage() {
     const fetchLogs = async () => {
         setLogsLoading(true);
         try {
-            const res = await fetch('/api/user/logs', {
-                headers: { 'Authorization': `Bearer ${getToken()}` }
-            });
-            if (!res.ok) throw new Error('Failed to fetch logs');
-            const data = await res.json();
-            setLogs(data);
+            const data = await request.get('/user/logs');
+            setLogs(data as any[]);
         } catch (error) {
-            Toast.error('获取登录日志失败');
+            // Interceptor handles error
         } finally {
             setLogsLoading(false);
         }
@@ -60,19 +51,11 @@ function ProfilePage() {
 
     const handleUpdateProfile = async (values: any) => {
         try {
-            const res = await fetch('/api/user/profile', {
-                method: 'PATCH',
-                headers: { 
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${getToken()}` 
-                },
-                body: JSON.stringify(values),
-            });
-            if (!res.ok) throw new Error('Failed to update');
+            await request.patch('/user/profile', values);
             Toast.success('更新成功');
             fetchProfile();
         } catch (error) {
-            Toast.error('更新失败');
+            // Interceptor handles error
         }
     };
 
@@ -82,18 +65,10 @@ function ProfilePage() {
             return;
         }
         try {
-            const res = await fetch('/api/user/change-password', {
-                method: 'POST',
-                headers: { 
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${getToken()}` 
-                },
-                body: JSON.stringify({ password: values.password }),
-            });
-            if (!res.ok) throw new Error('Failed to change password');
+            await request.post('/user/change-password', { password: values.password });
             Toast.success('密码修改成功');
         } catch (error) {
-            Toast.error('密码修改失败');
+            // Interceptor handles error
         }
     };
 

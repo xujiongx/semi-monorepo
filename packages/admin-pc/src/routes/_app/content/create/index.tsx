@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { createFileRoute, useNavigate } from '@tanstack/react-router';
-import { Form, Button, Toast, Select } from '@douyinfe/semi-ui';
-import MDEditor from '@uiw/react-md-editor';
+import React, { useState, useEffect } from "react";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { Form, Button, Toast } from "@douyinfe/semi-ui";
+import MDEditor from "@uiw/react-md-editor";
+import request from "@/utils/request";
 
-export const Route = createFileRoute('/_app/content/create/')({
-  component: ContentCreate,
+export const Route = createFileRoute("/_app/content/create/")({
+    component: ContentCreate,
 });
 
 function ContentCreate() {
@@ -12,35 +13,23 @@ function ContentCreate() {
     const [content, setContent] = useState("");
     const [loading, setLoading] = useState(false);
     const [categories, setCategories] = useState<any[]>([]);
-    const getToken = () => localStorage.getItem('access_token');
 
     useEffect(() => {
-        fetch('/api/category', {
-            headers: { 'Authorization': `Bearer ${getToken()}` }
-        })
-            .then(res => res.json())
-            .then(data => setCategories(data))
-            .catch(() => Toast.error('获取分类列表失败'));
+        request.get('/category')
+            .then(data => setCategories(data as any[]))
+            .catch(() => {
+                // Error handled by interceptor
+            });
     }, []);
 
     const handleSubmit = async (values: any) => {
         setLoading(true);
         try {
-            const res = await fetch('/api/article', {
-                method: 'POST',
-                headers: { 
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${getToken()}` 
-                },
-                body: JSON.stringify({ ...values, content }),
-            });
-            
-            if (!res.ok) throw new Error('Create failed');
-
+            await request.post('/article', { ...values, content });
             Toast.success('创建成功');
             navigate({ to: '/content/list' });
         } catch (error) {
-            Toast.error('创建失败');
+            // Error handled by interceptor
         } finally {
             setLoading(false);
         }
