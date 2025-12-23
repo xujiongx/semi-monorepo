@@ -52,6 +52,7 @@ const RESOURCE_TYPES = [
 ];
 
 function ResourcesPage() {
+  const fileInputRef = React.useRef<HTMLInputElement>(null);
   const [resources, setResources] = useState<Resource[]>([]);
   const [loading, setLoading] = useState(false);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
@@ -160,6 +161,43 @@ function ResourcesPage() {
       );
   };
 
+  const handleManualUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+      const files = e.target.files;
+      if (!files || files.length === 0) return;
+      
+      console.log('【手动上传】开始处理文件:', files.length);
+
+      // Convert FileList to Array
+      const fileList = Array.from(files);
+      
+      for (const file of fileList) {
+           console.log('【手动上传】上传中:', file.name);
+           const formData = new FormData();
+           formData.append('file', file);
+           
+           try {
+               const response = await request.post('/upload', formData, {
+                   headers: { 'Content-Type': 'multipart/form-data' },
+                   onUploadProgress: (progressEvent) => {
+                       if (progressEvent.total) {
+                           const percent = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+                           console.log(`【手动上传】进度 ${file.name}: ${percent}%`);
+                       }
+                   }
+               });
+               console.log('【手动上传】成功:', response);
+               handleUploadSuccess(response, file);
+           } catch (error: any) {
+               console.error('【手动上传】失败:', error);
+               Toast.error(`上传失败: ${file.name} - ${error.response?.status || '未知错误'}`);
+               handleUploadError();
+           }
+      }
+      
+      // Reset input value to allow selecting same file again
+      e.target.value = '';
+  };
+
   const renderIcon = (type: string) => {
       switch(type) {
           case 'image': return <IconImage className={styles.fileIcon} />;
@@ -219,18 +257,21 @@ function ResourcesPage() {
             )}
           </div>
           
-          <Upload
-            action="/api/upload"
-            headers={{ Authorization: `Bearer ${localStorage.getItem('access_token')}` }}
-            name="file"
-            showUploadList={false}
-            accept="*"
-            multiple
-            onSuccess={handleUploadSuccess}
-            onError={handleUploadError}
+          <input 
+              type="file" 
+              ref={fileInputRef} 
+              style={{ display: 'none' }} 
+              onChange={handleManualUpload} 
+              multiple 
+          />
+          <Button 
+            theme="solid" 
+            type="primary" 
+            icon={<IconUpload />}
+            onClick={() => fileInputRef.current?.click()}
           >
-              <Button theme="solid" type="primary" icon={<IconUpload />}>上传资源</Button>
-          </Upload>
+              上传资源
+          </Button>
       </div>
 
       {resources.length > 0 ? (
